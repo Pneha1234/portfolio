@@ -1,0 +1,1034 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+/* Force compact styles with highest specificity */
+.about-section-compact {
+    padding: 40px 0 !important;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+}
+
+.section-compact {
+    padding: 40px 0 !important;
+    background: white !important;
+}
+
+.section-compact:nth-child(even) {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+}
+
+.section-title-compact {
+    font-size: 1.8rem !important;
+    font-weight: 700 !important;
+    color: #0891b2 !important;
+    margin-bottom: 1rem !important;
+}
+
+.section-header-compact {
+    margin-bottom: 1.5rem !important;
+}
+
+.btn-primary-compact {
+    background: linear-gradient(135deg, #0891b2 0%, #059669 100%) !important;
+    color: white !important;
+    padding: 8px 16px !important;
+    border-radius: 8px !important;
+    text-decoration: none !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    border: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+.btn-primary-compact:hover {
+    background: linear-gradient(135deg, #0e7490 0%, #047857 100%) !important;
+    color: white !important;
+    text-decoration: none !important;
+    transform: translateY(-1px) !important;
+}
+
+.projects-grid-compact {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+    gap: 1.5rem !important;
+}
+
+.project-card-compact {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-radius: 12px !important;
+    padding: 1.5rem !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid rgba(8, 145, 178, 0.1) !important;
+}
+
+.appointments-cta {
+    background: linear-gradient(135deg, #0891b2 0%, #059669 100%) !important;
+    color: white !important;
+}
+
+.appointments-cta-card {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 16px !important;
+    padding: 2rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.appointments-cta .cta-title {
+    color: black !important;
+}
+
+.appointments-cta .cta-description {
+    color: black !important;
+}
+
+.appointments-cta .cta-feature {
+    color: black !important;
+}
+
+.appointments-cta .cta-services small {
+    color: black !important;
+}
+
+.btn-cta-primary {
+    background: white !important;
+    color: #0891b2 !important;
+    padding: 12px 24px !important;
+    border-radius: 12px !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+.btn-cta-primary:hover {
+    color: #0891b2 !important;
+    text-decoration: none !important;
+}
+
+/* Skills Section Styles */
+.skills-section {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 16px !important;
+    padding: 2rem !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    backdrop-filter: blur(10px) !important;
+    margin-top: 2rem !important;
+}
+
+.skills-title {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    color: #0891b2 !important;
+    margin-bottom: 1.5rem !important;
+    text-align: center !important;
+}
+
+.skills-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+    gap: 1.5rem !important;
+}
+
+.skill-category {
+    background: rgba(248, 250, 252, 0.8) !important;
+    border-radius: 12px !important;
+    padding: 1.25rem !important;
+    border: 1px solid rgba(8, 145, 178, 0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+.skill-category:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+    border-color: #0891b2 !important;
+}
+
+.skill-category-title {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #059669 !important;
+    margin-bottom: 1rem !important;
+    text-align: center !important;
+    border-bottom: 2px solid #e0f2fe !important;
+    padding-bottom: 0.5rem !important;
+}
+
+.skill-tags {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+    justify-content: center !important;
+}
+
+.skill-tag {
+    background: linear-gradient(135deg, #0891b2 0%, #059669 100%) !important;
+    color: white !important;
+    padding: 6px 12px !important;
+    border-radius: 20px !important;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    cursor: default !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.skill-tag::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent) !important;
+    transition: left 0.5s !important;
+}
+
+.skill-tag:hover::before {
+    left: 100% !important;
+}
+
+.skill-tag:hover {
+    transform: translateY(-1px) scale(1.05) !important;
+    box-shadow: 0 4px 15px rgba(8, 145, 178, 0.3) !important;
+}
+
+.skill-icon {
+    font-size: 1.1rem !important;
+    margin-right: 6px !important;
+    vertical-align: middle !important;
+}
+
+/* Newsletter Section Styles */
+.newsletter-section {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+}
+
+.newsletter-cta-card {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-radius: 16px !important;
+    padding: 2.5rem !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(8, 145, 178, 0.1) !important;
+}
+
+.newsletter-title {
+    font-size: 1.8rem !important;
+    font-weight: 700 !important;
+    color: #0891b2 !important;
+    margin-bottom: 1rem !important;
+}
+
+.newsletter-description {
+    font-size: 1.1rem !important;
+    color: #64748b !important;
+    line-height: 1.6 !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.newsletter-features {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+}
+
+.newsletter-feature {
+    display: flex !important;
+    align-items: center !important;
+    font-size: 0.95rem !important;
+    color: #475569 !important;
+}
+
+.btn-newsletter-primary {
+    background: linear-gradient(135deg, #0891b2 0%, #059669 100%) !important;
+    color: white !important;
+    padding: 14px 28px !important;
+    border-radius: 12px !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(8, 145, 178, 0.3) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.btn-newsletter-primary::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent) !important;
+    transition: left 0.5s !important;
+}
+
+.btn-newsletter-primary:hover::before {
+    left: 100% !important;
+}
+
+.btn-newsletter-primary:hover {
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 8px 25px rgba(8, 145, 178, 0.4) !important;
+    color: white !important;
+    text-decoration: none !important;
+}
+
+.newsletter-stats {
+    margin-top: 1rem !important;
+    padding: 0.75rem !important;
+    background: rgba(8, 145, 178, 0.05) !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(8, 145, 178, 0.1) !important;
+}
+
+@media (max-width: 768px) {
+    .skills-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+    
+    .skill-category {
+        padding: 1rem !important;
+    }
+    
+    .skills-section {
+        padding: 1.5rem !important;
+        margin-top: 1.5rem !important;
+    }
+    
+    .newsletter-cta-card {
+        padding: 2rem 1.5rem !important;
+    }
+    
+    .newsletter-title {
+        font-size: 1.5rem !important;
+    }
+    
+    .newsletter-features {
+        margin-bottom: 1.5rem !important;
+    }
+    
+    .btn-newsletter-primary {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 12px 24px !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- About Section - Compact -->
+<section id="about" class="about-section-compact">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="about-content">
+                    <h2 class="section-title-compact">About Me</h2>
+                    {% if profile.bio %}
+                        <div class="about-text-compact">
+                            {{ profile.bio|safe }}
+                        </div>
+                    {% else %}
+                        <p class="about-text-compact">
+                            Senior Software Engineer with 5+ years of experience designing and delivering scalable backend systems and cloud-native architectures. Proven expertise in building secure APIs, optimizing distributed systems, and leading teams to deliver high-impact solutions.
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">5+</div>
+                        <div class="stat-label">Years Experience</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ projects.count|default:"10" }}+</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ papers.count|default:"15" }}+</div>
+                        <div class="stat-label">Papers Read</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Skills Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="skills-section">
+                    <h3 class="skills-title">Technical Skills</h3>
+                    <div class="skills-grid">
+                        {% for category_name, skills in skills_by_category.items %}
+                        <div class="skill-category">
+                            <h5 class="skill-category-title">{{ category_name }}</h5>
+                            <div class="skill-tags">
+                                {% for skill in skills %}
+                                    <span class="skill-tag" title="{{ skill.get_proficiency_display_text }}{% if skill.years_experience %} - {{ skill.years_experience }} years{% endif %}">
+                                        {% if skill.icon_class %}
+                                            <i class="{{ skill.icon_class }} skill-icon"></i>
+                                        {% endif %}
+                                        {{ skill.name }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% empty %}
+                        <!-- Fallback skills if none in database -->
+                        <div class="skill-category">
+                            <h5 class="skill-category-title">Languages</h5>
+                            <div class="skill-tags">
+                                <span class="skill-tag">Python</span>
+                                <span class="skill-tag">JavaScript</span>
+                                <span class="skill-tag">SQL</span>
+                                <span class="skill-tag">Java</span>
+                            </div>
+                        </div>
+                        <div class="skill-category">
+                            <h5 class="skill-category-title">Frameworks</h5>
+                            <div class="skill-tags">
+                                <span class="skill-tag">Django</span>
+                                <span class="skill-tag">FastAPI</span>
+                                <span class="skill-tag">React</span>
+                                <span class="skill-tag">Node.js</span>
+                            </div>
+                        </div>
+                        <div class="skill-category">
+                            <h5 class="skill-category-title">Databases</h5>
+                            <div class="skill-tags">
+                                <span class="skill-tag">PostgreSQL</span>
+                                <span class="skill-tag">Redis</span>
+                                <span class="skill-tag">MongoDB</span>
+                            </div>
+                        </div>
+                        <div class="skill-category">
+                            <h5 class="skill-category-title">Cloud & DevOps</h5>
+                            <div class="skill-tags">
+                                <span class="skill-tag">AWS</span>
+                                <span class="skill-tag">Docker</span>
+                                <span class="skill-tag">Kubernetes</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Projects Section - Compact -->
+<section id="projects" class="section-compact">
+    <div class="container">
+        <div class="section-header-compact">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="section-title-compact">Featured Projects</h2>
+                <div class="section-actions">
+                    {% if profile.github_url %}
+                        <a href="{{ profile.github_url }}" target="_blank" class="btn-link-compact">
+                            <i class="fab fa-github me-1"></i>GitHub Profile
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'portfolio:projects' %}" class="btn-primary-compact">View All</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="projects-grid-compact">
+            {% for project in projects %}
+            <div class="project-card-compact">
+                <div class="project-header">
+                    <h4 class="project-title">{{ project.title }}</h4>
+                    <div class="project-links">
+                        <a href="{{ project.github_url }}" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        {% if project.live_url %}
+                            <a href="{{ project.live_url }}" target="_blank" class="project-link">
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <p class="project-description">{{ project.description|safe|truncatewords:20 }}</p>
+                {% if project.technologies %}
+                    <div class="project-tech-compact">
+                        {% for tech in project.get_technologies_list|slice:":3" %}
+                            <span class="tech-tag">{{ tech }}</span>
+                        {% endfor %}
+                        {% if project.get_technologies_list|length > 3 %}
+                            <span class="tech-tag more">+{{ project.get_technologies_list|length|add:"-3" }}</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div class="project-card-compact">
+                <div class="project-header">
+                    <h4 class="project-title">AWS Kinesis Data Tools</h4>
+                    <div class="project-links">
+                        <a href="https://github.com/Pneha1234/Kinesis" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                <p class="project-description">Python utilities and examples for scalable data streaming and analytics using AWS Kinesis.</p>
+                <div class="project-tech-compact">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">AWS</span>
+                    <span class="tech-tag">Kinesis</span>
+                </div>
+            </div>
+            <div class="project-card-compact">
+                <div class="project-header">
+                    <h4 class="project-title">AWS Cloud Workshop</h4>
+                    <div class="project-links">
+                        <a href="https://github.com/Pneha1234/aws_workshop" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                <p class="project-description">Hands-on resources and code samples for learning AWS cloud infrastructure and DevOps.</p>
+                <div class="project-tech-compact">
+                    <span class="tech-tag">AWS</span>
+                    <span class="tech-tag">DevOps</span>
+                    <span class="tech-tag">Infrastructure</span>
+                </div>
+            </div>
+            <div class="project-card-compact">
+                <div class="project-header">
+                    <h4 class="project-title">Python Interview Prep</h4>
+                    <div class="project-links">
+                        <a href="https://github.com/Pneha1234/Python-Interview" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                <p class="project-description">Curated Python interview questions and answers for technical interview preparation.</p>
+                <div class="project-tech-compact">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Algorithms</span>
+                    <span class="tech-tag">Interview</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Books Section - Horizontal Layout -->
+<section id="reading" class="section-compact books-section">
+    <div class="container">
+        <div class="section-header-compact">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="section-title-compact">My Bookshelf</h2>
+                <div class="section-actions">
+                    <a href="https://www.goodreads.com/user/show/73015025-neha" target="_blank" class="btn-link-compact">
+                        <i class="fab fa-goodreads me-1"></i>Goodreads
+                    </a>
+                    <a href="{% url 'portfolio:books' %}" class="btn-primary-compact">View All</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="books-horizontal-scroll">
+            <div class="books-container">
+                {% for book in books %}
+                <div class="book-card-horizontal">
+                    <div class="book-cover-container">
+                        {% if book.cover_image %}
+                            <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="book-cover">
+                        {% else %}
+                            <div class="book-cover-placeholder">
+                                <i class="fas fa-book"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="book-info">
+                        <h5 class="book-title">{{ book.title }}</h5>
+                        <p class="book-author">{{ book.author }}</p>
+                        {% if book.rating %}
+                            <div class="book-rating">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= book.rating %}
+                                        <i class="fas fa-star"></i>
+                                    {% else %}
+                                        <i class="far fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="book-actions">
+                            <a href="{{ book.goodreads_url }}" target="_blank" class="book-link">
+                                <i class="fab fa-goodreads"></i>
+                            </a>
+                            {% if book.notes_url %}
+                                <a href="{{ book.notes_url }}" target="_blank" class="book-link">
+                                    <i class="fas fa-sticky-note"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="book-card-horizontal">
+                    <div class="book-cover-container">
+                        <div class="book-cover-placeholder">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    </div>
+                    <div class="book-info">
+                        <h5 class="book-title">CPython Internals</h5>
+                        <p class="book-author">Anthony Shaw</p>
+                        <div class="book-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <div class="book-actions">
+                            <a href="https://www.goodreads.com/book/show/53412684-cpython-internals" target="_blank" class="book-link">
+                                <i class="fab fa-goodreads"></i>
+                            </a>
+                            <a href="{% static 'cpython-notes.html' %}" target="_blank" class="book-link">
+                                <i class="fas fa-sticky-note"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="book-card-horizontal">
+                    <div class="book-cover-container">
+                        <div class="book-cover-placeholder">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    </div>
+                    <div class="book-info">
+                        <h5 class="book-title">Atomic Habits</h5>
+                        <p class="book-author">James Clear</p>
+                        <div class="book-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <div class="book-actions">
+                            <a href="https://www.goodreads.com/book/show/40121378-atomic-habits" target="_blank" class="book-link">
+                                <i class="fab fa-goodreads"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="book-card-horizontal">
+                    <div class="book-cover-container">
+                        <div class="book-cover-placeholder">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    </div>
+                    <div class="book-info">
+                        <h5 class="book-title">The Pragmatic Programmer</h5>
+                        <p class="book-author">Andrew Hunt, David Thomas</p>
+                        <div class="book-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <div class="book-actions">
+                            <a href="https://www.goodreads.com/book/show/4099.The_Pragmatic_Programmer" target="_blank" class="book-link">
+                                <i class="fab fa-goodreads"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="bookshelf-quick-links">
+            <a href="https://www.goodreads.com/review/list/73015025?shelf=currently-reading" target="_blank" class="quick-link">
+                <i class="fas fa-book-reader me-1"></i>Currently Reading
+            </a>
+            <a href="https://www.goodreads.com/review/list/73015025?shelf=to-read" target="_blank" class="quick-link">
+                <i class="fas fa-bookmark me-1"></i>To Read
+            </a>
+            <a href="https://www.goodreads.com/review/list/73015025?shelf=read" target="_blank" class="quick-link">
+                <i class="fas fa-check-circle me-1"></i>Completed
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Papers Section - Compact -->
+<section id="papers" class="section-compact">
+    <div class="container">
+        <div class="section-header-compact">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="section-title-compact">Research Papers</h2>
+                <a href="{% url 'portfolio:papers' %}" class="btn-primary-compact">View All</a>
+            </div>
+        </div>
+        
+        <div class="papers-grid-compact">
+            {% for paper in papers|slice:":6" %}
+            <div class="paper-card-compact">
+                <div class="paper-category">{{ paper.get_category_display }}</div>
+                <h5 class="paper-title">{{ paper.title|truncatewords:8 }}</h5>
+                <p class="paper-authors">{{ paper.authors|truncatewords:3 }}</p>
+                <div class="paper-actions">
+                    <a href="{{ paper.paper_url }}" target="_blank" class="paper-link">
+                        <i class="fas fa-file-pdf me-1"></i>Paper
+                    </a>
+                    {% if paper.notes_url %}
+                        <a href="{{ paper.notes_url }}" target="_blank" class="paper-link">
+                            <i class="fas fa-sticky-note me-1"></i>Notes
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="paper-card-compact">
+                <div class="paper-category">Databases</div>
+                <h5 class="paper-title">Bigtable: A Distributed Storage System</h5>
+                <p class="paper-authors">Fay Chang, Jeffrey Dean, et al.</p>
+                <div class="paper-actions">
+                    <a href="https://research.google/pubs/bigtable-a-distributed-storage-system-for-structured-data/" target="_blank" class="paper-link">
+                        <i class="fas fa-file-pdf me-1"></i>Paper
+                    </a>
+                </div>
+            </div>
+            <div class="paper-card-compact">
+                <div class="paper-category">Databases</div>
+                <h5 class="paper-title">F1: A Distributed SQL Database</h5>
+                <p class="paper-authors">Jeff Shute, Radek Vingralek, et al.</p>
+                <div class="paper-actions">
+                    <a href="https://research.google/pubs/f1-a-distributed-sql-database-that-scales/" target="_blank" class="paper-link">
+                        <i class="fas fa-file-pdf me-1"></i>Paper
+                    </a>
+                </div>
+            </div>
+            <div class="paper-card-compact">
+                <div class="paper-category">Systems</div>
+                <h5 class="paper-title">The Google File System</h5>
+                <p class="paper-authors">Sanjay Ghemawat, Howard Gobioff</p>
+                <div class="paper-actions">
+                    <a href="https://static.googleusercontent.com/media/research.google.com/en//archive/gfs-sosp2003.pdf" target="_blank" class="paper-link">
+                        <i class="fas fa-file-pdf me-1"></i>Paper
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Blog Section - Compact -->
+<section id="blog" class="section-compact">
+    <div class="container">
+        <div class="section-header-compact">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="section-title-compact">Latest Blog Posts</h2>
+                <div class="section-actions">
+                    {% if profile.medium_url %}
+                        <a href="{{ profile.medium_url }}" target="_blank" class="btn-link-compact">
+                            <i class="fab fa-medium me-1"></i>Medium Profile
+                        </a>
+                    {% endif %}
+                    {% if profile.newsletter_url %}
+                        <a href="{{ profile.newsletter_url }}" target="_blank" class="btn-link-compact">
+                            <i class="fas fa-newspaper me-1"></i>Newsletter
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'portfolio:blog' %}" class="btn-primary-compact">View All</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="blog-grid-compact">
+            {% for post in blog_posts|slice:":3" %}
+            <div class="blog-card-compact">
+                <div class="blog-meta">
+                    <span class="blog-date">{{ post.published_date|date:"M d, Y" }}</span>
+                    {% if post.tags %}
+                        <div class="blog-tags-compact">
+                            {% for tag in post.get_tags_list|slice:":2" %}
+                                <span class="blog-tag">{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <h4 class="blog-title">{{ post.title|truncatewords:8 }}</h4>
+                <p class="blog-description">{{ post.description|safe|truncatewords:15 }}</p>
+                <a href="{{ post.medium_url }}" target="_blank" class="blog-link">
+                    <i class="fab fa-medium me-1"></i>Read on Medium
+                </a>
+            </div>
+            {% empty %}
+            <div class="blog-card-compact">
+                <div class="blog-meta">
+                    <span class="blog-date">Aug 15, 2023</span>
+                    <div class="blog-tags-compact">
+                        <span class="blog-tag">Python</span>
+                        <span class="blog-tag">CPython</span>
+                    </div>
+                </div>
+                <h4 class="blog-title">CPython Interpreter: From Source Code to Execution</h4>
+                <p class="blog-description">A deep dive into how the CPython interpreter works, from parsing source code to executing instructions.</p>
+                <a href="https://medium.com/@nehapandey408/cpython-interpreter-from-source-code-to-execution-36f9084705e0" target="_blank" class="blog-link">
+                    <i class="fab fa-medium me-1"></i>Read on Medium
+                </a>
+            </div>
+            <div class="blog-card-compact">
+                <div class="blog-meta">
+                    <span class="blog-date">Jul 20, 2023</span>
+                    <div class="blog-tags-compact">
+                        <span class="blog-tag">OS</span>
+                        <span class="blog-tag">Systems</span>
+                    </div>
+                </div>
+                <h4 class="blog-title">Introduction to Operating Systems</h4>
+                <p class="blog-description">An overview of operating system concepts, architecture, and why they matter for developers.</p>
+                <a href="https://medium.com/@nehapandey408/introduction-to-operating-systems-d4138a3d1282" target="_blank" class="blog-link">
+                    <i class="fab fa-medium me-1"></i>Read on Medium
+                </a>
+            </div>
+            <div class="blog-card-compact">
+                <div class="blog-meta">
+                    <span class="blog-date">Jun 10, 2023</span>
+                    <div class="blog-tags-compact">
+                        <span class="blog-tag">Memory</span>
+                        <span class="blog-tag">GC</span>
+                    </div>
+                </div>
+                <h4 class="blog-title">Why Do We Need a Garbage Collector?</h4>
+                <p class="blog-description">Explains the importance of garbage collection in programming languages and how it works under the hood.</p>
+                <a href="https://medium.com/@nehapandey408/why-do-we-need-a-garbage-collector-a-comprehensive-explanation-e1434d2d9765" target="_blank" class="blog-link">
+                    <i class="fab fa-medium me-1"></i>Read on Medium
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Subscription Section -->
+{% if profile.newsletter_url %}
+<section id="newsletter" class="section-compact newsletter-section">
+    <div class="container">
+        <div class="newsletter-cta-card">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div class="newsletter-content">
+                        <h2 class="newsletter-title">
+                            <i class="fas fa-newspaper me-2"></i>
+                            {% if profile.newsletter_title %}
+                                {{ profile.newsletter_title }}
+                            {% else %}
+                                Stay Updated with My Newsletter
+                            {% endif %}
+                        </h2>
+                        <p class="newsletter-description">
+                            {% if profile.newsletter_description %}
+                                {{ profile.newsletter_description }}
+                            {% else %}
+                                Get the latest insights on software engineering, system design, and tech industry trends delivered directly to your LinkedIn feed.
+                            {% endif %}
+                        </p>
+                        <div class="newsletter-features">
+                            <div class="newsletter-feature">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Weekly tech insights</span>
+                            </div>
+                            <div class="newsletter-feature">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>System design deep dives</span>
+                            </div>
+                            <div class="newsletter-feature">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Career development tips</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div class="newsletter-actions">
+                        <a href="{{ profile.newsletter_url }}" target="_blank" class="btn-newsletter-primary">
+                            <i class="fab fa-linkedin me-2"></i>Subscribe on LinkedIn
+                        </a>
+                        <div class="newsletter-stats">
+                            <small class="text-muted">Join the growing community of tech professionals</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Appointments Section - Compact -->
+<section id="appointments" class="section-compact appointments-cta">
+    <div class="container">
+        <div class="appointments-cta-card">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div class="cta-content">
+                        <h2 class="cta-title">Let's Work Together</h2>
+                        <p class="cta-description">Schedule a consultation, mentoring session, or technical discussion. All sessions are currently free!</p>
+                        <div class="cta-features">
+                            <div class="cta-feature">
+                                <i class="fas fa-video text-primary"></i>
+                                <span>Video Call Sessions</span>
+                            </div>
+                            <div class="cta-feature">
+                                <i class="fas fa-clock text-primary"></i>
+                                <span>24h Response Time</span>
+                            </div>
+                            <div class="cta-feature">
+                                <i class="fas fa-gift text-success"></i>
+                                <span>Currently Free</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div class="cta-actions">
+                        <a href="{% url 'portfolio:appointments' %}" class="btn-cta-primary">
+                            <i class="fas fa-calendar-plus me-2"></i>Book Appointment
+                        </a>
+                        <div class="cta-services">
+                            <small class="text-muted">Technical Consultation • Career Mentoring • Code Review</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section - Compact -->
+<section id="contact" class="section-compact contact-section">
+    <div class="container">
+        <div class="section-header-compact">
+            <h2 class="section-title-compact text-center">Get In Touch</h2>
+            <p class="text-center text-muted">Have a question or want to collaborate? I'd love to hear from you.</p>
+        </div>
+        
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div class="contact-methods">
+                    {% if profile.email %}
+                        <div class="contact-method">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h5>Email</h5>
+                                <a href="mailto:{{ profile.email }}">{{ profile.email }}</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if profile.linkedin_url %}
+                        <div class="contact-method">
+                            <div class="contact-icon">
+                                <i class="fab fa-linkedin"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h5>LinkedIn</h5>
+                                <a href="{{ profile.linkedin_url }}" target="_blank">Connect with me</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if profile.github_url %}
+                        <div class="contact-method">
+                            <div class="contact-icon">
+                                <i class="fab fa-github"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h5>GitHub</h5>
+                                <a href="{{ profile.github_url }}" target="_blank">Follow my work</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <form id="contactForm" class="contact-form-compact">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <input type="email" name="sender" class="form-control-compact" placeholder="Your Email" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <input type="text" name="subject" class="form-control-compact" placeholder="Subject" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <textarea name="message" class="form-control-compact" rows="4" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary-compact w-100">
+                        <i class="fas fa-paper-plane me-2"></i>Send Message
+                    </button>
+                    <div id="contact-status" class="mt-3"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Contact form handler
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const statusDiv = document.getElementById('contact-status');
+            const originalBtnText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
+            statusDiv.innerHTML = '';
+            
+            // Collect form data
+            const formData = {
+                sender: this.sender.value,
+                subject: this.subject.value,
+                message: this.message.value
+            };
+            
+            try {
+                const response = await fetch('{% url "portfolio:contact_submit" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    statusDiv.innerHTML = '<div class="alert alert-success"><i class="fas fa-check-circle me-2"></i>' + result.message + '</div>';
+                    this.reset();
+                } else {
+                    statusDiv.innerHTML = '<div class="alert alert-danger"><i class="fas fa-exclamation-circle me-2"></i>' + result.message + '</div>';
+                }
+                
+            } catch (error) {
+                statusDiv.innerHTML = '<div class="alert alert-danger"><i class="fas fa-exclamation-circle me-2"></i>An error occurred. Please try again.</div>';
+            }
+            
+            // Reset button
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+        });
+    }
+});
+</script>
+{% endblock %}

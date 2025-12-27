@@ -1,0 +1,134 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block title %}Research Papers - {{ block.super }}{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <h2>Research Papers</h2>
+        <p>Curiosity drives my reading journey—I love diving into technical papers, exploring everything from distributed databases to AI. Below are the papers that sparked new ideas, challenged my thinking, or inspired deeper exploration.</p>
+        
+        <!-- Category Filter -->
+        <div class="category-filter mb-4">
+            <a href="{% url 'portfolio:papers' %}" class="btn btn-tertiary {% if not selected_category %}active{% endif %}">All</a>
+            {% for category_key, category_name in categories %}
+                <a href="{% url 'portfolio:papers' %}?category={{ category_key }}" 
+                   class="btn btn-tertiary {% if selected_category == category_key %}active{% endif %}">
+                   {{ category_name }}
+                </a>
+            {% endfor %}
+        </div>
+        
+        {% if papers %}
+            {% regroup papers by category as papers_by_category %}
+            {% for category in papers_by_category %}
+                <h4>
+                    {% if category.grouper == 'ai' %}
+                        AI & Machine Learning
+                    {% elif category.grouper == 'databases' %}
+                        Databases & Storage Systems
+                    {% elif category.grouper == 'systems' %}
+                        Systems & Performance
+                    {% elif category.grouper == 'distributed' %}
+                        Distributed Systems
+                    {% elif category.grouper == 'security' %}
+                        Security
+                    {% else %}
+                        {{ category.grouper|title }}
+                    {% endif %}
+                </h4>
+                <ul class="paper-list">
+                    {% for paper in category.list %}
+                    <li class="paper-item">
+                        <h5><a href="{{ paper.paper_url }}" target="_blank">{{ paper.title }}</a></h5>
+                        <p class="paper-authors">{{ paper.authors }}</p>
+                        {% if paper.summary %}
+                            <div class="paper-summary">{{ paper.summary|safe|truncatewords:30 }}</div>
+                        {% endif %}
+                        <div class="paper-links">
+                            <a href="{{ paper.paper_url }}" target="_blank" class="btn btn-primary btn-sm">Read Paper</a>
+                            {% if paper.notes_url %}
+                                <a href="{{ paper.notes_url }}" target="_blank" class="btn btn-secondary btn-sm">My Notes</a>
+                            {% endif %}
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        {% else %}
+            <div class="text-center">
+                <p>No papers available yet. Check back soon!</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+.paper-list {
+    list-style: none;
+    padding: 0;
+}
+
+.paper-item {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(34,58,94,0.08);
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.paper-item h5 {
+    margin-bottom: 8px;
+}
+
+.paper-item h5 a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.paper-item h5 a:hover {
+    color: var(--secondary-color);
+}
+
+.paper-authors {
+    color: var(--light-text-color);
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.paper-summary {
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.paper-links .btn {
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.category-filter {
+    margin-bottom: 30px;
+}
+
+.category-filter .btn {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.category-filter .btn.active {
+    background: rgba(8, 145, 178, 0.2) !important;
+    color: #0891b2 !important;
+    border: 2px solid #0891b2 !important;
+    font-weight: 600 !important;
+}
+
+.category-filter .btn:hover {
+    background: rgba(8, 145, 178, 0.1) !important;
+    color: #0891b2 !important;
+    border-color: #0891b2 !important;
+    transform: translateY(-1px) !important;
+}
+</style>
+{% endblock %}

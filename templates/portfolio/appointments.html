@@ -1,0 +1,467 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block title %}Book an Appointment - {{ profile.name }}{% endblock %}
+
+{% block content %}
+<div class="page-header-compact">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="page-title-compact">Book an Appointment</h1>
+                <p class="page-subtitle-compact">Schedule a consultation, mentoring session, or technical discussion</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <div class="header-accent">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="appointments-section-compact">
+    <div class="container">
+        <!-- Calendly Integration (if available) -->
+        {% if profile.calendly_url %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header-compact">
+                        <h5 class="mb-0"><i class="fas fa-external-link-alt me-2"></i>Quick Booking with Calendly</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="calendly-inline-widget" 
+                             data-url="{{ profile.calendly_url }}" 
+                             style="min-width:320px;height:600px;">
+                        </div>
+                        <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Side by Side: Request Form and Available Services -->
+        <div class="row g-4">
+            <!-- Request Appointment Form -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header-compact">
+                        <h5 class="mb-0"><i class="fas fa-envelope me-2"></i>Request Appointment</h5>
+                    </div>
+                    <div class="card-body-compact">
+                        <p class="text-muted mb-3 small">
+                            Fill out the form below and I'll get back to you within 24 hours to confirm the details.
+                        </p>
+
+                        <form id="appointmentForm">
+                            <div class="mb-3">
+                                <label for="appointment_type" class="form-label-compact">Appointment Type *</label>
+                                <select class="form-control-compact" id="appointment_type" name="appointment_type" required>
+                                    <option value="">Select appointment type...</option>
+                                    {% for apt_type in appointment_types %}
+                                    <option value="{{ apt_type.id }}" data-duration="{{ apt_type.duration }}">
+                                        {{ apt_type.name }} ({{ apt_type.duration }} min)
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="client_name" class="form-label-compact">Your Name *</label>
+                                    <input type="text" class="form-control-compact" id="client_name" name="client_name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="client_email" class="form-label-compact">Email Address *</label>
+                                    <input type="email" class="form-control-compact" id="client_email" name="client_email" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="client_phone" class="form-label-compact">Phone Number</label>
+                                    <input type="tel" class="form-control-compact" id="client_phone" name="client_phone">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="company" class="form-label-compact">Company/Organization</label>
+                                    <input type="text" class="form-control-compact" id="company" name="company">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="preferred_date" class="form-label-compact">Preferred Date & Time</label>
+                                <input type="datetime-local" class="form-control-compact" id="preferred_date" name="preferred_date">
+                                <small class="form-text text-muted">Optional: Suggest your preferred time</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="purpose" class="form-label-compact">Purpose of Meeting *</label>
+                                <textarea class="form-control-compact" id="purpose" name="purpose" rows="3" 
+                                          placeholder="Please describe what you'd like to discuss..." required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary-compact w-100">
+                                <i class="fas fa-paper-plane me-2"></i>Submit Request
+                            </button>
+                        </form>
+
+                        <div id="appointmentMessage" class="mt-3" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Services -->
+            <div class="col-lg-6">
+                {% if appointment_types %}
+                <div class="card shadow-sm h-100">
+                    <div class="card-header-compact">
+                        <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Available Services</h5>
+                    </div>
+                    <div class="card-body-compact">
+                        <div class="services-note-compact mb-3">
+                            <i class="fas fa-gift text-success me-2"></i>
+                            <span class="text-success fw-bold small">All consultations are currently free!</span>
+                        </div>
+                        
+                        {% for apt_type in appointment_types %}
+                        <div class="service-item mb-3">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h6 class="service-title-compact mb-1">{{ apt_type.name }}</h6>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge-compact">{{ apt_type.duration }}min</span>
+                                    <span class="free-tag-compact">
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="service-description">{{ apt_type.description }}</p>
+                        </div>
+                        {% if not forloop.last %}<hr class="service-divider">{% endif %}
+                        {% endfor %}
+                        
+                        <div class="services-footer-compact mt-3 pt-3">
+                            <div class="d-flex align-items-center justify-content-center gap-3 text-muted small">
+                                <span><i class="fas fa-video me-1"></i>Video Call</span>
+                                <span><i class="fas fa-clock me-1"></i>24h Response</span>
+                                <span><i class="fas fa-shield-alt me-1"></i>Confidential</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.getElementById('appointmentForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const messageDiv = document.getElementById('appointmentMessage');
+    const originalBtnText = submitBtn.innerHTML;
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+    messageDiv.style.display = 'none';
+    
+    // Collect form data
+    const formData = {
+        appointment_type: document.getElementById('appointment_type').value,
+        client_name: document.getElementById('client_name').value,
+        client_email: document.getElementById('client_email').value,
+        client_phone: document.getElementById('client_phone').value,
+        company: document.getElementById('company').value,
+        preferred_date: document.getElementById('preferred_date').value,
+        purpose: document.getElementById('purpose').value
+    };
+    
+    try {
+        const response = await fetch('{% url "portfolio:appointment_submit" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            messageDiv.className = 'alert alert-success';
+            messageDiv.innerHTML = '<i class="fas fa-check-circle me-2"></i>' + result.message;
+            this.reset(); // Clear form
+        } else {
+            messageDiv.className = 'alert alert-danger';
+            messageDiv.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>' + result.message;
+        }
+        
+    } catch (error) {
+        messageDiv.className = 'alert alert-danger';
+        messageDiv.innerHTML = '<i class="fas fa-exclamation-circle me-2"></i>An error occurred. Please try again.';
+    }
+    
+    // Reset button and show message
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalBtnText;
+    messageDiv.style.display = 'block';
+    
+    // Scroll to message
+    messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+</script>
+
+<style>
+/* Compact Appointments Page Styles */
+.appointments-section-compact {
+    padding: 40px 0;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0fdf4 100%);
+    min-height: 70vh;
+}
+
+.page-header-compact {
+    background: linear-gradient(135deg, #0891b2 0%, #0e7490 50%, #059669 100%);
+    color: white;
+    padding: 40px 0;
+    margin-bottom: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.page-header-compact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.page-title-compact {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.page-subtitle-compact {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.header-accent {
+    font-size: 3rem;
+    opacity: 0.3;
+    position: relative;
+    z-index: 1;
+}
+
+.card {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.card-header-compact {
+    background: linear-gradient(135deg, #0891b2 0%, #059669 100%);
+    color: white;
+    border: none;
+    padding: 1rem 1.5rem;
+    position: relative;
+}
+
+.card-header-compact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+}
+
+.card-body-compact {
+    padding: 1.5rem;
+}
+
+.form-control-compact, .form-select {
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.form-control-compact:focus, .form-select:focus {
+    border-color: #0891b2;
+    box-shadow: 0 0 0 0.15rem rgba(8, 145, 178, 0.2);
+    background: white;
+}
+
+.form-label-compact {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+}
+
+.btn-primary-compact {
+    background: linear-gradient(135deg, #0891b2 0%, #059669 100%);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary-compact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-primary-compact:hover::before {
+    left: 100%;
+}
+
+.btn-primary-compact:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(8, 145, 178, 0.3);
+    background: linear-gradient(135deg, #0e7490 0%, #047857 100%);
+}
+
+.services-note-compact {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border: 1px solid #059669;
+    border-radius: 8px;
+    padding: 8px 12px;
+    text-align: center;
+}
+
+.service-item {
+    transition: all 0.3s ease;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.service-item:hover {
+    background: linear-gradient(135deg, #f0f9ff 0%, #f0fdf4 100%);
+}
+
+.service-title-compact {
+    color: #0891b2;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.service-description {
+    color: #64748b;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-bottom: 0;
+}
+
+.badge-compact {
+    background: linear-gradient(135deg, #0891b2 0%, #059669 100%);
+    color: white;
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.free-tag-compact {
+    color: #059669;
+    font-size: 0.9rem;
+}
+
+.service-divider {
+    border-color: #e2e8f0;
+    margin: 0.75rem 0;
+}
+
+.services-footer-compact {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 8px;
+    padding: 12px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border: 1px solid #059669;
+    color: #047857;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 0.9rem;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border: 1px solid #dc2626;
+    color: #b91c1c;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 991px) {
+    .col-lg-6 {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-title-compact {
+        font-size: 1.8rem;
+    }
+    
+    .page-subtitle-compact {
+        font-size: 0.9rem;
+    }
+    
+    .card-body-compact {
+        padding: 1rem;
+    }
+    
+    .header-accent {
+        font-size: 2rem;
+        text-align: center;
+        margin-top: 1rem;
+    }
+    
+    .calendly-inline-widget {
+        height: 500px !important;
+    }
+}
+</style>
+{% endblock %}

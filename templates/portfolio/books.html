@@ -1,0 +1,285 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block title %}Books - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Horizontal Books Layout */
+.books-horizontal-container {
+    overflow-x: auto;
+    padding: 1rem 0;
+    margin: 0 -1rem;
+}
+
+.books-horizontal-grid {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0 1rem;
+    min-width: max-content;
+}
+
+.book-card-horizontal {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    min-width: 280px;
+    max-width: 300px;
+    border: 1px solid rgba(8, 145, 178, 0.1);
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.book-card-horizontal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    border-color: #0891b2;
+}
+
+.book-cover-horizontal {
+    width: 120px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    margin: 0 auto 1rem;
+    display: block;
+}
+
+.book-cover-placeholder-horizontal {
+    width: 120px;
+    height: 180px;
+    background: linear-gradient(135deg, #0891b2 0%, #059669 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2.5rem;
+    margin: 0 auto 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.book-title-horizontal {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #0891b2;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.book-author-horizontal {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+}
+
+.book-category-horizontal {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-bottom: 0.75rem;
+}
+
+.book-rating-horizontal {
+    color: #ffc107;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+}
+
+.book-review-horizontal {
+    font-size: 0.85rem;
+    color: #64748b;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.book-actions-horizontal {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+.book-actions-horizontal .btn {
+    font-size: 0.85rem;
+    padding: 8px 16px;
+}
+
+/* Scrollbar styling */
+.books-horizontal-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.books-horizontal-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.books-horizontal-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #0891b2 0%, #059669 100%);
+    border-radius: 10px;
+}
+
+.books-horizontal-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #0e7490 0%, #047857 100%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .books-horizontal-grid {
+        padding: 0 0.5rem;
+        gap: 1rem;
+    }
+    
+    .book-card-horizontal {
+        min-width: 240px;
+        max-width: 260px;
+        padding: 1rem;
+    }
+    
+    .book-cover-horizontal,
+    .book-cover-placeholder-horizontal {
+        width: 100px;
+        height: 150px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <div class="page-header">
+            <h2>My Bookshelf</h2>
+            <a href="https://www.goodreads.com/user/show/73015025-neha" target="_blank" class="btn btn-primary">My Goodreads Profile</a>
+        </div>
+        
+        <!-- Category Filter -->
+        <div class="category-filter mb-4">
+            <a href="{% url 'portfolio:books' %}" class="btn btn-tertiary {% if not selected_category %}active{% endif %}">All</a>
+            {% for category_key, category_name in categories %}
+                <a href="{% url 'portfolio:books' %}?category={{ category_key }}" 
+                   class="btn btn-tertiary {% if selected_category == category_key %}active{% endif %}">
+                   {{ category_name }}
+                </a>
+            {% endfor %}
+        </div>
+        
+        <!-- Horizontal Books Layout -->
+        <div class="books-horizontal-container">
+            <div class="books-horizontal-grid">
+                {% for book in books %}
+                <div class="book-card-horizontal">
+                    {% if book.cover_image %}
+                        <img src="{{ book.cover_image.url }}" alt="{{ book.title }} Cover" class="book-cover-horizontal">
+                    {% else %}
+                        <div class="book-cover-placeholder-horizontal">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <h3 class="book-title-horizontal">{{ book.title }}</h3>
+                    <p class="book-author-horizontal">{{ book.author }}</p>
+                    <p class="book-category-horizontal">{{ book.get_category_display }}</p>
+                    
+                    {% if book.rating %}
+                        <div class="book-rating-horizontal">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= book.rating %}
+                                    <i class="fas fa-star"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    {% if book.review %}
+                        <div class="book-review-horizontal">{{ book.review|safe|truncatewords:15 }}</div>
+                    {% endif %}
+                    
+                    <div class="book-actions-horizontal">
+                        <a href="{{ book.goodreads_url }}" target="_blank" class="btn btn-primary">
+                            <i class="fab fa-goodreads me-1"></i>Goodreads
+                        </a>
+                        {% if book.notes_url %}
+                            <a href="{{ book.notes_url }}" class="btn btn-secondary" target="_blank">
+                                <i class="fas fa-sticky-note me-1"></i>Notes
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="book-card-horizontal">
+                    <div class="book-cover-placeholder-horizontal">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="book-title-horizontal">CPython Internals</h3>
+                    <p class="book-author-horizontal">Anthony Shaw</p>
+                    <p class="book-category-horizontal">Technical</p>
+                    <div class="book-rating-horizontal">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <div class="book-actions-horizontal">
+                        <a href="https://www.goodreads.com/book/show/53412684-cpython-internals" target="_blank" class="btn btn-primary">
+                            <i class="fab fa-goodreads me-1"></i>Goodreads
+                        </a>
+                        <a href="{% static 'cpython-notes.html' %}" class="btn btn-secondary" target="_blank">
+                            <i class="fas fa-sticky-note me-1"></i>Notes
+                        </a>
+                    </div>
+                </div>
+                <div class="book-card-horizontal">
+                    <div class="book-cover-placeholder-horizontal">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="book-title-horizontal">Atomic Habits</h3>
+                    <p class="book-author-horizontal">James Clear</p>
+                    <p class="book-category-horizontal">Personal Development</p>
+                    <div class="book-rating-horizontal">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <div class="book-actions-horizontal">
+                        <a href="https://www.goodreads.com/book/show/40121378-atomic-habits" target="_blank" class="btn btn-primary">
+                            <i class="fab fa-goodreads me-1"></i>Goodreads
+                        </a>
+                    </div>
+                </div>
+                <div class="book-card-horizontal">
+                    <div class="book-cover-placeholder-horizontal">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="book-title-horizontal">The Pragmatic Programmer</h3>
+                    <p class="book-author-horizontal">Andrew Hunt, David Thomas</p>
+                    <p class="book-category-horizontal">Technical</p>
+                    <div class="book-rating-horizontal">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <div class="book-actions-horizontal">
+                        <a href="https://www.goodreads.com/book/show/4099.The_Pragmatic_Programmer" target="_blank" class="btn btn-primary">
+                            <i class="fab fa-goodreads me-1"></i>Goodreads
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="bookshelf-links" style="margin-top:32px; text-align: center;">
+            <a href="https://www.goodreads.com/review/list/73015025?shelf=to-read" target="_blank" class="btn btn-tertiary">
+                <i class="fas fa-bookmark me-1"></i>To Read
+            </a>
+            <a href="https://www.goodreads.com/review/list/73015025?shelf=read" target="_blank" class="btn btn-tertiary">
+                <i class="fas fa-check-circle me-1"></i>Read
+            </a>
+            <a href="https://www.goodreads.com/review/list/73015025?shelf=currently-reading" target="_blank" class="btn btn-tertiary">
+                <i class="fas fa-book-reader me-1"></i>Currently Reading
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

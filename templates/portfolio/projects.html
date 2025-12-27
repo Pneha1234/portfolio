@@ -1,0 +1,72 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block title %}Projects - {{ block.super }}{% endblock %}
+
+{% block content %}
+<section class="section-padding">
+    <div class="container">
+        <div class="page-header">
+            <h2>All Projects</h2>
+            <a href="https://github.com/Pneha1234" target="_blank" class="btn btn-primary">My GitHub Profile</a>
+        </div>
+        <div class="projects-grid">
+            {% for project in projects %}
+            <div class="project-card">
+                {% if project.image %}
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}" class="project-image">
+                {% endif %}
+                <h3>{{ project.title }}</h3>
+                <div class="project-description">{{ project.description|safe }}</div>
+                {% if project.technologies %}
+                    <div class="project-tech">
+                        {% for tech in project.get_technologies_list %}
+                            <span>{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="project-links">
+                    <a href="{{ project.github_url }}" target="_blank" class="btn btn-primary">View on GitHub</a>
+                    {% if project.live_url %}
+                        <a href="{{ project.live_url }}" target="_blank" class="btn btn-secondary">Live Demo</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="project-card">
+                <h3>AWS Kinesis Data Tools</h3>
+                <p>Python utilities and examples for scalable data streaming and analytics using AWS Kinesis.</p>
+                <div class="project-tech">
+                    <span>Python</span><span>AWS Kinesis</span><span>Data Streaming</span>
+                </div>
+                <a href="https://github.com/Pneha1234/Kinesis" target="_blank" class="btn btn-primary">View on GitHub</a>
+            </div>
+            <div class="project-card">
+                <h3>AWS Cloud Workshop</h3>
+                <p>Hands-on resources and code samples for learning AWS cloud infrastructure, automation, and DevOps best practices.</p>
+                <div class="project-tech">
+                    <span>AWS</span><span>DevOps</span><span>Infrastructure</span>
+                </div>
+                <a href="https://github.com/Pneha1234/aws_workshop" target="_blank" class="btn btn-primary">View on GitHub</a>
+            </div>
+            <div class="project-card">
+                <h3>Python Interview Prep</h3>
+                <p>Curated Python interview questions and answers to help you prepare for technical interviews and coding rounds.</p>
+                <div class="project-tech">
+                    <span>Python</span><span>Interview Prep</span><span>Algorithms</span>
+                </div>
+                <a href="https://github.com/Pneha1234/Python-Interview" target="_blank" class="btn btn-primary">View on GitHub</a>
+            </div>
+            <div class="project-card">
+                <h3>LeetCode Solutions</h3>
+                <p>Comprehensive solutions to popular LeetCode problems, with explanations and code for Python learners.</p>
+                <div class="project-tech">
+                    <span>Python</span><span>Algorithms</span><span>LeetCode</span>
+                </div>
+                <a href="https://github.com/Pneha1234/LeetCode" target="_blank" class="btn btn-primary">View on GitHub</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
